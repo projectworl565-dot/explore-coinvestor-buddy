@@ -6,6 +6,14 @@
   const KEY = 'vve-coinvest-v1';
   const OPP = { code: 'VVE-2436', title: 'AI Workflow Agent for Vertical Operations', desc: 'An AI agent platform that automates enterprise workflows across sales, operations and customer support for industry verticals.', tags: ['AI', 'B2B SaaS', 'India'], target: 100000 };
   const STAGES = ['Discover', 'Create / Join', 'Discuss', 'Due diligence', 'Agree allocation', 'Individual commitment', 'Sign agreement'];
+  const NETWORK = [
+    { id: 'n1', title: 'VC Partner · AI / SaaS', desc: 'Early-stage software · India · $30K–$100K', ind: ['AI', 'SaaS'], rng: '$30K–$100K', geo: 'India', typ: 'VC Partner', exp: 'AI / SaaS' },
+    { id: 'n2', title: 'Family Office · India', desc: 'Patient capital · Technology · $100K+', ind: ['AI', 'Fintech'], rng: '$100K+', geo: 'India', typ: 'Family Office', exp: 'Enterprise' },
+    { id: 'n3', title: 'Strategic Buyer · Enterprise AI', desc: 'Operating perspective · B2B · $30K–$100K', ind: ['AI'], rng: '$30K–$100K', geo: 'Global', typ: 'Strategic Buyer', exp: 'Enterprise' },
+    { id: 'n4', title: 'Operator Investor · B2B', desc: 'Go-to-market · SaaS · $10K–$30K', ind: ['SaaS'], rng: '$10K–$30K', geo: 'Asia-Pacific', typ: 'Operator Investor', exp: 'Go-to-market' },
+    { id: 'n5', title: 'Angel · Digital Health', desc: 'Clinical networks · Healthcare · $10K–$30K', ind: ['Healthcare'], rng: '$10K–$30K', geo: 'India', typ: 'Operator Investor', exp: 'Healthcare' },
+  ];
+  window.__ciFilter = (el) => { const F = window.__ciF || (window.__ciF = {}); F[el.dataset.f] = el.value; modals.invite(); };
   const fresh = () => ({
     stage: 3, joined: false, isPrivate: true, tab: 'All', activeStep: 3,
     investors: [
