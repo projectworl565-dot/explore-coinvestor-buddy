@@ -182,7 +182,7 @@
   }
   
   // ===== Router =====
-  const VALID_ROUTES = ['home', 'dashboard', 'trust', 'playbook', 'faq', 'pricing', 'about', 'listing', 'browse', 'list', 'purchase', 'apply', 'verify', 'terms', 'profile', 'earnings', 'settings'];
+  const VALID_ROUTES = ['home', 'dashboard', 'trust', 'playbook', 'faq', 'pricing', 'about', 'listing', 'browse', 'list', 'purchase', 'apply', 'verify', 'terms', 'profile', 'earnings', 'settings', 'coinvest'];
   let composedListing = null;  // carries architect's composed data to the buyer preview
 
   // ===================================================================
