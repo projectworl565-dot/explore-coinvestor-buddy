@@ -6,6 +6,14 @@
   const KEY = 'vve-coinvest-v1';
   const OPP = { code: 'VVE-2436', title: 'AI Workflow Agent for Vertical Operations', desc: 'An AI agent platform that automates enterprise workflows across sales, operations and customer support for industry verticals.', tags: ['AI', 'B2B SaaS', 'India'], target: 100000 };
   const STAGES = ['Discover', 'Create / Join', 'Discuss', 'Due diligence', 'Agree allocation', 'Individual commitment', 'Sign agreement'];
+  const NETWORK = [
+    { id: 'n1', title: 'VC Partner · AI / SaaS', desc: 'Early-stage software · India · $30K–$100K', ind: ['AI', 'SaaS'], rng: '$30K–$100K', geo: 'India', typ: 'VC Partner', exp: 'AI / SaaS' },
+    { id: 'n2', title: 'Family Office · India', desc: 'Patient capital · Technology · $100K+', ind: ['AI', 'Fintech'], rng: '$100K+', geo: 'India', typ: 'Family Office', exp: 'Enterprise' },
+    { id: 'n3', title: 'Strategic Buyer · Enterprise AI', desc: 'Operating perspective · B2B · $30K–$100K', ind: ['AI'], rng: '$30K–$100K', geo: 'Global', typ: 'Strategic Buyer', exp: 'Enterprise' },
+    { id: 'n4', title: 'Operator Investor · B2B', desc: 'Go-to-market · SaaS · $10K–$30K', ind: ['SaaS'], rng: '$10K–$30K', geo: 'Asia-Pacific', typ: 'Operator Investor', exp: 'Go-to-market' },
+    { id: 'n5', title: 'Angel · Digital Health', desc: 'Clinical networks · Healthcare · $10K–$30K', ind: ['Healthcare'], rng: '$10K–$30K', geo: 'India', typ: 'Operator Investor', exp: 'Healthcare' },
+  ];
+  window.__ciFilter = (el) => { const F = window.__ciF || (window.__ciF = {}); F[el.dataset.f] = el.value; modals.invite(); };
   const fresh = () => ({
     stage: 3, joined: false, isPrivate: true, tab: 'All', activeStep: 3,
     investors: [
@@ -282,12 +290,30 @@
         ${S.syndicates.map((s, i) => `<div class="ci-synd"><div><span class="ci-mono">${esc(s.stage)}</span><h5>${esc(s.name)}</h5><small>$${s.c}K / $${s.t}K committed · ${s.n} investors</small></div><div style="min-width:170px"><div class="ci-bar" style="margin-top:0"><i style="width:${Math.min(100, (s.c / s.t) * 100)}%"></i></div><button class="ci-btn block" data-act="openSynd" data-i="${i}">${s.c >= s.t ? 'View' : 'Open'} ${ARROW}</button></div></div>`).join('')}`, true);
     },
     invite() {
+      const F = window.__ciF || (window.__ciF = { ind: '', rng: '', geo: '', typ: '', exp: '' });
+      const sel = (id, label, opts) => `<div class="ci-field" style="margin:0"><label style="font-size:.72rem;color:var(--text-muted)">${label}</label><select data-f="${id}" onchange="window.__ciFilter(this)">${opts.map((o, i) => `<option value="${i ? esc(o) : ''}" ${F[id] === (i ? o : '') ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></div>`;
+      const list = NETWORK.filter((n) => (!F.ind || n.ind.includes(F.ind)) && (!F.rng || n.rng === F.rng) && (!F.geo || n.geo === F.geo) && (!F.typ || n.typ === F.typ) && (!F.exp || n.exp === F.exp));
+      const invited = S.netInvited || [];
+      modal(`<span class="ci-mono role">vvEntra network · Private invitation</span><h3>Invite verified investors</h3><p>Invite relevant investors from the vvEntra network to participate in this opportunity.</p>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem;margin-bottom:1.2rem">
+          ${sel('ind', 'Industry', ['All industries', 'AI', 'SaaS', 'Fintech', 'Healthcare'])}
+          ${sel('rng', 'Investment range', ['Any range', '$10K–$30K', '$30K–$100K', '$100K+'])}
+          ${sel('geo', 'Geography', ['All geographies', 'India', 'Asia-Pacific', 'Global'])}
+          ${sel('typ', 'Investor type', ['All types', 'VC Partner', 'Family Office', 'Strategic Buyer', 'Operator Investor'])}
+          ${sel('exp', 'Expertise', ['All expertise', 'AI / SaaS', 'Enterprise', 'Go-to-market', 'Healthcare'])}
+        </div>
+        <div class="ci-between" style="margin-bottom:.4rem"><span class="ci-mono role">Suggested investors</span><small style="color:var(--text-faint);font-size:.72rem">Identities are only shared after an invitation is accepted.</small></div>
+        ${list.length ? list.map((n) => `<div class="ci-between" style="padding:.8rem 0;border-bottom:1px solid var(--line);flex-wrap:nowrap"><div class="ci-person"><span class="ci-av" style="border-radius:4px">👥</span><div><b>${esc(n.title)}</b><small>${esc(n.desc)}</small></div></div>${invited.includes(n.id) ? `<button class="ci-btn sm" disabled style="color:var(--green)">✓ Invited</button>` : `<button class="ci-btn sm" data-act="inviteOne" data-id="${n.id}">Invite ${ARROW}</button>`}</div>`).join('') : `<p style="padding:1rem 0;color:var(--text-faint)">No investors match these filters.</p>`}
+        <div class="ci-note" style="margin-top:1rem">🔒 Only role, investment range and relevant expertise are shown before an invitation is accepted.</div>`, true);
+    },
+    inviteForm(n) {
       modal(`<span class="ci-mono role">Verified network</span><h3>Invite a verified investor</h3><p>Invitations are sent only to identity-verified vvEntra investors. They will see the opportunity summary before joining.</p>
-        <div class="ci-field"><label>Investor name</label><input id="ciInvName" placeholder="e.g. Karan Malhotra"></div>
+        <input type="hidden" id="ciInvNet" value="${n ? n.id : ''}">
+        <div class="ci-field"><label>Investor name</label><input id="ciInvName" placeholder="e.g. Karan Malhotra" value="${n ? esc(n.title) : ''}"></div>
         <div class="ci-grid2"><div class="ci-field"><label>Email</label><input id="ciInvEmail" placeholder="investor@firm.com"></div>
         <div class="ci-field"><label>Proposed allocation</label><input id="ciInvAmt" value="${money(Math.max(0, OPP.target - proposed()))}"></div></div>
         <div class="ci-field"><label>Personal note (optional)</label><textarea id="ciInvNote" rows="2" placeholder="Why this opportunity might interest them…"></textarea></div>
-        <div class="ci-modal-foot"><button class="ci-btn" data-act="close">Cancel</button><button class="ci-btn primary" data-act="doInvite">Send invitation ${ARROW}</button></div>`);
+        <div class="ci-modal-foot"><button class="ci-btn" data-act="${n ? 'invite' : 'close'}">Cancel</button><button class="ci-btn primary" data-act="doInvite">Send invitation ${ARROW}</button></div>`);
     },
     join() {
       modal(`<span class="ci-mono role">Join syndicate</span><h3>Join this syndicate</h3><p>Indicate an allocation you are considering. This is a non-binding, simulated indication of interest.</p>
@@ -349,12 +375,15 @@
       if (s.cur || s.name.indexOf(OPP.title) === 0) document.getElementById('ci-workspace').scrollIntoView({ behavior: 'smooth' });
       else toast('Opening "' + s.name + '" workspace — available in a future release.');
     },
+    inviteOne(el) { modals.inviteForm(NETWORK.find((n) => n.id === el.dataset.id)); },
     doInvite() {
       const name = val('ciInvName').trim(); const email = val('ciInvEmail').trim();
       if (!name) return toast('Please enter the investor\'s name.');
       if (email && !/^\S+@\S+\.\S+$/.test(email)) return toast('Please enter a valid email.');
       const amt = Math.min(num(val('ciInvAmt')), Math.max(0, OPP.target - proposed()));
       S.investors.push({ id: Date.now(), name, role: 'Co-Investor', firm: email || 'Verified investor', amt, status: 'Invited', joined: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) });
+      const netId = val('ciInvNet');
+      if (netId) { S.netInvited = (S.netInvited || []).concat(netId); save(); render(); modals.invite(); return toast('Invitation sent to ' + name + '.'); }
       save(); closeModal(); render(); toast('Invitation sent to ' + name + '.');
     },
     join() { if (!S.joined) modals.join(); },
