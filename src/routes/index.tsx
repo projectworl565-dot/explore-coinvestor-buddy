@@ -31,6 +31,12 @@ function Index() {
       script.src = "/vventra.js";
       document.body.appendChild(script);
     }
+    if (!document.getElementById("vventra-coinvest")) {
+      const ci = document.createElement("script");
+      ci.id = "vventra-coinvest";
+      ci.src = "/coinvest.js";
+      document.body.appendChild(ci);
+    }
   }, []);
 
   return <div dangerouslySetInnerHTML={{ __html: referenceMarkup }} />;
