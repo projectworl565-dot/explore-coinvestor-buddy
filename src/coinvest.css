@@ -7,7 +7,7 @@
 .ci-cta-btn:hover { background: var(--role-deep); }
 .ci-cta-note { display: block; margin-top: .7rem; font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .04em; color: var(--text-faint); }
 
-.coinvest-page { background: var(--bg); color: var(--text); padding-bottom: 4rem; }
+.coinvest-page { background: var(--bg); color: var(--text); padding-top: 120px; padding-bottom: 4rem; }
 .ci-wrap { max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
 .ci-section { padding: 4rem 0; border-top: 1px solid var(--line); }
 .ci-mono { font-family: 'JetBrains Mono', monospace; font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-faint); }
